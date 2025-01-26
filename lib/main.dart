@@ -1,102 +1,116 @@
-import 'packapage/material.dart';
+import 'package:flutter/material.dart';
 
-class Calculadora extends StatefulWidget {
-    const Calculadora ({super.key});
+import 'calculadora.dart';
 
-@override
-State<Calculadora> createState() => _CalculadoraState():
+void main() {
+  runApp(const App());
 }
 
-class _CalculadoraState extends State<Calculadora> {
-     final String _limpar = 'Limpar'; 
-     String _expressao = '';
-     String _resultado = ''; 
+class App extends StatelessWidget {
+  const App({super.key});
 
-    void _pressionarBotao(String valor) {
-         setState( () {
-            if (valor == 'Limpar') {
-                _expressao = '';
-                _resultado = '';
-            } else if (valor == '=') {
-                _calcularResultado();
-            } else {
-                _expressao += valor;
-            }
-        });
-    }
-    
-    void _calcularResultado() {
-        try {
-            _resultado = _avaliarExpressao(_expressao).toString();
-        } catch (e) {
-            _resultado = 'Não é possível calcular:';
-        }
-    }
-
-
-    double _avaliarExpressao(String expressao) {
-        expressao = expressao.replaceAll('x', '*');
-        expressao = expressao.replaceAll('÷','/');
-        //Avaliar a espressao com a biblioteca expressions
-        ExpressionEvaluator avaliador = const ExpressionEvaluator();
-        double resultado = avaliador.eval(Expression.parse(expressao), {});
-        return resultado;
-    }
-
-
-       Widget _botao(String valor) {
-    return TextButton(
-        child: Text(
-            valor,
-            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-        ),
-        onPressed: () => _pressionarBotao(valor),
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Layout',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const HomePage(title: 'Calculadora'),
     );
+  }
 }
-    @override 
-    Widget buil(BuildContext context) {
-        return Column(
-            children: [
-                 Expanded(
-                    child: Text(
-                        _expressao,
-                        style: const TextStyle(fontSize: 24)
-                    ),
-                 ),
+
+class HomePage extends StatefulWidget {
+  const HomePage({
+    super.key,
+    required this.title,
+  });
+
+  final String title;
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: Container(),
+            ),
+            Expanded(
+              flex: 7,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
                   Expanded(
-                    child: Text(
-                        _resultado,
-                        style: const TextStyle(fonSize: 24)
+                    child: Container(
+                        // alignment: Alignment.center,
+                        // color: Colors.red,
+                        // child: const Text('Primeira Coluna'),
+                        ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 1,
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black45,
+                            blurRadius: 10,
+                            offset: Offset(5, 5),
+                          ),
+                        ],
+                      ),
+                      child: const Calculadora(),
                     ),
                   ),
-                 Expanded(
-                  flex: 3,
-                  child: GridView.count(
-                  crossAxisCount: 4,
-                  childAspectRatio: 2,
-                  children: [ 
-                    _botao('7'),
-                    _botao('8'),
-                    _botao('9'),
-                    _botao('÷'),
-                    _botao('4'),
-                    _botao('5'),
-                    _botao('6'),
-                    _botao('x'),
-                    _botao('1'),
-                    _botao('2'),
-                    _botao('3'),
-                    _botao('-'),
-                    _botao('0'),
-                    _botao('.'),
-                    _botao('='),
-                    _botao('+'),
+                  Expanded(
+                    child: Container(
+                        // alignment: Alignment.center,
+                        // color: Colors.red,
+                        // child: const Text('Terceira Coluna'),
+                        ),
+                  ),
                 ],
+              ),
             ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                //alignment: Alignment.center,
+                //color: Colors.blue,
+                //child: const Text('Layout Inferior'),
+              ),
+            ),
+          ],
         ),
-        Expanded(child: _botao(_limpar),
-        )
-      ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
